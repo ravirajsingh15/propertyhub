@@ -1,0 +1,150 @@
+<div class="auth-container">
+
+  <div class="auth-card">
+    <h2>Create Account</h2>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+
+      <% if resource.errors.any? %>
+        <div class="error-box">
+          <% resource.errors.full_messages.each do |msg| %>
+            <p><%= msg %></p>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= f.label :name %>
+        <%= f.text_field :name, autofocus: true, placeholder: "Enter your name", class: "input" %>
+      </div>
+
+      <div class="form-group">
+      <%= f.label :phone_number %>
+       <%= f.text_field :phone_number,
+        autofocus: true,
+        placeholder: "Enter your phone number",
+        class: "input" %>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <%= f.label :email %>
+        <%= f.email_field :email, class: "input", placeholder: "Enter email" %>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group password-wrapper">
+        <%= f.label :password %>
+        <%= f.password_field :password, id: "password-field", class: "input", placeholder: "Enter password" %>
+        <span class="toggle-password" onclick="togglePassword()">👁</span>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="form-group password-wrapper">
+        <%= f.label :password_confirmation %>
+        <%= f.password_field :password_confirmation, id: "confirm-password-field", class: "input", placeholder: "Confirm password" %>
+        <span class="toggle-password" onclick="toggleConfirmPassword()">👁</span>
+      </div>
+
+      <!-- Submit -->
+      <div class="form-group">
+        <%= f.submit "Sign Up", class: "btn-signup" %>
+      </div>
+
+    <% end %>
+
+    <div class="links">
+      <p>Already have an account?</p>
+      <%= link_to "Login", new_user_session_path %>
+    </div>
+
+  </div>
+
+</div>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Card */
+.auth-card {
+  background: white;
+  padding: 35px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+/* Form */
+.form-group {
+  margin-bottom: 15px;
+  position: relative;
+}
+
+/* Input */
+.input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-top: 5px;
+}
+
+/* Eye icon */
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 38px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* Button */
+.btn-signup {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Error */
+.error-box {
+  background: #ffe6e6;
+  color: red;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.links {
+  text-align: center;
+  margin-top: 10px;
+}
+</style>
+
+<script>
+function togglePassword() {
+  const field = document.getElementById("password-field");
+  field.type = field.type === "password" ? "text" : "password";
+}
+
+function toggleConfirmPassword() {
+  const field = document.getElementById("confirm-password-field");
+  field.type = field.type === "password" ? "text" : "password";
+}
+</script>

@@ -1,0 +1,711 @@
+<div class="container">
+
+  <% flash.each do |key, message| %>
+    <div class="flash <%= key %>">
+      <%= message %>
+    </div>
+  <% end %>
+
+  <!-- HEADER -->
+  <div class="header">
+
+    <div class="left-header">
+      <h2>
+        <i class="fa-solid fa-building"></i>
+        Properties
+      </h2>
+    </div>
+
+    <div class="right-header">
+
+      <!-- ADD PROPERTY -->
+      <%= link_to new_property_path,
+          class: "header-btn add-btn" do %>
+
+        <i class="fa-solid fa-plus"></i>
+        Add Property
+
+      <% end %>
+
+      <!-- BULK DELETE -->
+      <%= button_to bulk_delete_properties_path,
+        method: :delete,
+        data: {
+          turbo_confirm:
+          "Delete all properties?"
+        },
+        class: "header-btn delete-all-btn" do %>
+
+        <i class="fa-solid fa-trash"></i>
+        Bulk Delete
+
+      <% end %>
+
+      <!-- WISHLIST -->
+      <div class="wishlist-bucket">
+
+        <%= link_to my_wishlist_path do %>
+
+          <i class="fa-solid fa-heart"></i>
+
+          Wishlist
+
+          <span>
+            <%= current_user.wishlists.count %>
+          </span>
+
+        <% end %>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-wrapper">
+
+    <%= form_with url: properties_path,
+        method: :get,
+        local: true,
+        class: "search-form" do %>
+
+      <div class="search-input-wrapper">
+
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+        <input type="text"
+               name="query"
+               placeholder="Search properties..."
+               value="<%= params[:query] %>">
+
+      </div>
+
+      <button type="submit">
+        Search
+      </button>
+
+    <% end %>
+
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-container">
+
+    <table>
+
+      <thead>
+
+        <tr>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Owner</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Address</th>
+          <th>City</th>
+          <th>Price</th>
+          <th>Actions</th>
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <% @properties.each do |property| %>
+
+          <tr>
+
+            <!-- IMAGE -->
+            <td>
+
+              <% if property.image.present? %>
+
+                <%= image_tag property.image.url,
+                    class: "property-image" %>
+
+              <% else %>
+
+                <div class="no-image">
+                  No Image
+                </div>
+
+              <% end %>
+
+            </td>
+
+            <!-- DETAILS -->
+            <td>
+              <strong>
+                <%= property.name %>
+              </strong>
+            </td>
+
+            <td>
+              <%= property.property_owner %>
+            </td>
+
+            <td>
+              <%= property.property_type %>
+            </td>
+
+            <td>
+
+              <span class="status-badge">
+
+                <%= property.status %>
+
+              </span>
+
+            </td>
+
+            <td>
+              <%= property.address %>
+            </td>
+
+            <td>
+              <%= property.city %>
+            </td>
+
+            <td class="price">
+
+              ₹ <%= property.price %>
+
+            </td>
+
+            <!-- ACTIONS -->
+            <td>
+
+              <div class="action-buttons">
+
+                <!-- VIEW -->
+                <%= link_to property_path(property),
+                    class: "action-btn view-btn" do %>
+
+                  <i class="fa-solid fa-eye"></i>
+
+                <% end %>
+
+                <!-- EDIT -->
+                <%= link_to edit_property_path(property),
+                    class: "action-btn edit-btn" do %>
+
+                  <i class="fa-solid fa-pen"></i>
+
+                <% end %>
+
+                <!-- DELETE -->
+                <%= button_to property_path(property),
+                    method: :delete,
+                    form: {
+                      data: {
+                        turbo: false
+                      }
+                    },
+                    class: "action-btn delete-btn" do %>
+
+                  <i class="fa-solid fa-trash"></i>
+
+                <% end %>
+
+                <!-- WISHLIST TOGGLE -->
+
+                <td>
+
+  <% if current_user.wishlisted?(property) %>
+
+    <%= button_to wishlist_path(property.id),
+        method: :delete,
+        class: "wishlist-btn saved-btn" do %>
+
+      ❤️ Saved
+
+    <% end %>
+
+  <% else %>
+
+    <%= button_to wishlists_path(
+          property_id: property.id
+        ),
+        method: :post,
+        class: "wishlist-btn unsaved-btn" do %>
+
+      🤍 Unsaved
+
+    <% end %>
+
+  <% end %>
+
+</td>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        <% end %>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <%= paginate @properties %>
+
+</div>
+
+<!-- DELETE MODAL -->
+<div id="confirmModal" class="modal">
+
+  <div class="modal-content">
+
+    <div class="modal-icon">
+      ⚠️
+    </div>
+
+    <h3>
+      Confirm Delete
+    </h3>
+
+    <p>
+      Are you sure you want to delete this property?
+    </p>
+
+    <div class="modal-actions">
+
+      <button id="cancelBtn">
+        Cancel
+      </button>
+
+      <button id="confirmBtn">
+        Delete
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- FONT AWESOME -->
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial;
+  background: #f4f7fb;
+}
+
+.container {
+  width: 95%;
+  margin: 30px auto;
+}
+
+/* FLASH */
+
+.flash {
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+/* DEFAULT UNSAVED */
+
+.unsaved-btn {
+  background: #e5e7eb;
+  color: #555;
+  border: none;
+}
+
+/* SAVED */
+
+.saved-btn {
+  background: linear-gradient(
+    45deg,
+    #ff4d6d,
+    #ff758f
+  );
+
+  color: white;
+  border: none;
+}
+
+/* COMMON */
+
+.wishlist-btn {
+  padding: 10px 18px;
+  border-radius: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.wishlist-btn:hover {
+  transform: scale(1.05);
+}
+
+.flash.notice {
+  background: #d4edda;
+  color: #155724;
+}
+
+/* HEADER */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.left-header h2 {
+  margin: 0;
+}
+
+.right-header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* BUTTONS */
+
+.header-btn {
+  padding: 12px 18px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.add-btn {
+  background: linear-gradient(
+    45deg,
+    #00b894,
+    #00cec9
+  );
+}
+
+.delete-all-btn {
+  background: linear-gradient(
+    45deg,
+    #ff4d4d,
+    #e60000
+  );
+}
+
+/* WISHLIST BUCKET */
+
+.wishlist-bucket a {
+  background: white;
+  padding: 12px 18px;
+  border-radius: 40px;
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  box-shadow:
+  0 4px 15px rgba(0,0,0,0.08);
+}
+
+.wishlist-bucket span {
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 4px 9px;
+  margin-left: 6px;
+}
+
+/* SEARCH */
+
+.search-wrapper {
+  margin-bottom: 25px;
+}
+
+.search-form {
+  display: flex;
+  background: white;
+  border-radius: 50px;
+  overflow: hidden;
+  box-shadow:
+  0 4px 15px rgba(0,0,0,0.08);
+}
+
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  padding: 0 15px;
+}
+
+.search-input-wrapper input {
+  border: none;
+  outline: none;
+  padding: 14px;
+  width: 100%;
+}
+
+.search-form button {
+  background: #0984e3;
+  color: white;
+  border: none;
+  padding: 0 25px;
+  cursor: pointer;
+}
+
+/* TABLE */
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  background: white;
+  border-collapse: collapse;
+  border-radius: 18px;
+  overflow: hidden;
+  min-width: 1000px;
+}
+
+th {
+  background: #111827;
+  color: white;
+}
+
+th,
+td {
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+/* IMAGE */
+
+.property-image {
+  width: 120px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.no-image {
+  color: gray;
+}
+
+/* PRICE */
+
+.price {
+  color: #00b894;
+  font-weight: bold;
+}
+
+/* STATUS */
+
+.status-badge {
+  background: #dfe6e9;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+/* ACTION BUTTONS */
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.view-btn {
+  background: #0984e3;
+}
+
+.edit-btn {
+  background: #fdcb6e;
+  color: black;
+}
+
+.delete-btn {
+  background: #d63031;
+}
+
+/* WISHLIST */
+
+.wishlist-btn {
+  border: none;
+  padding: 10px 18px;
+  border-radius: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.save-btn {
+  background: #ecf0f1;
+  color: black;
+}
+
+.saved-btn {
+  background: linear-gradient(
+    45deg,
+    #ff4d6d,
+    #ff758f
+  );
+  color: white;
+}
+
+.wishlist-btn:hover {
+  transform: scale(1.05);
+}
+
+/* MODAL */
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  width: 350px;
+  text-align: center;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+#cancelBtn,
+#confirmBtn {
+  flex: 1;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+#cancelBtn {
+  background: #dfe6e9;
+}
+
+#confirmBtn {
+  background: #d63031;
+  color: white;
+}
+
+/* MOBILE */
+
+@media(max-width: 768px) {
+
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+
+  .right-header {
+    flex-wrap: wrap;
+  }
+
+  .search-form {
+    width: 100%;
+  }
+
+}
+
+</style>
+
+<script>
+
+setTimeout(() => {
+
+  document
+    .querySelectorAll('.flash')
+    .forEach(el => {
+      el.style.display = 'none';
+    });
+
+}, 3000);
+
+let deleteForm = null;
+
+document.addEventListener("turbo:load", () => {
+
+  document
+    .querySelectorAll(".delete-btn")
+    .forEach(btn => {
+
+      btn.addEventListener(
+        "click",
+        function(e) {
+
+          e.preventDefault();
+
+          deleteForm =
+            this.closest("form");
+
+          document
+            .getElementById(
+              "confirmModal"
+            )
+            .style.display = "flex";
+
+        }
+      );
+
+    });
+
+  document
+    .getElementById("cancelBtn")
+    .onclick = () => {
+
+      document
+        .getElementById(
+          "confirmModal"
+        )
+        .style.display = "none";
+
+    };
+
+  document
+    .getElementById("confirmBtn")
+    .onclick = () => {
+
+      if(deleteForm)
+        deleteForm.submit();
+
+    };
+
+});
+
+</script>

@@ -1,0 +1,196 @@
+<div class="page-wrapper">
+
+  <div class="form-container">
+    <h1 class="form-title">✏️ Edit Property</h1>
+
+    <%= form_with model: @property do |f| %>
+
+      <div class="form-grid">
+
+        <div class="field">
+          <%= f.label :name %>
+          <%= f.text_field :name, class: "input" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :price %>
+          <%= f.number_field :price, class: "input" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :property_type %>
+          <%= f.select :property_type, ["Flat","Villa","Plot"], {}, class: "input" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :status %>
+          <%= f.select :status, ["Available","Sold","Rented"], {}, class: "input" %>
+        </div>
+
+        <div class="field full">
+          <%= f.label :location %>
+          <%= f.text_field :location, class: "input" %>
+        </div>
+
+        <div class="field full">
+          <%= f.label :address %>
+          <%= f.text_field :address, class: "input" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :city %>
+          <%= f.text_field :city, class: "input" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :state %>
+          <%= f.text_field :state, class: "input" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :country %>
+          <%= f.text_field :country, class: "input" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :pincode %>
+          <%= f.text_field :pincode, class: "input" %>
+        </div>
+
+        <div class="field full">
+          <%= f.label :description %>
+          <%= f.text_area :description, class: "input textarea" %>
+        </div>
+
+       <div class="field full">
+
+        <% if @property.image.present? %>
+
+          <%= image_tag @property.image.url,
+              class: "property-image" %>
+
+        <% else %>
+
+          <p>No Image Available</p>
+
+        <% end %>
+
+      </div>
+
+      </div>
+
+    <% end %>
+  </div>
+
+</div>
+
+<style>
+  body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: #f4f6fb;
+}
+
+/* Page center */
+.page-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 50px 20px;
+}
+
+/* Card */
+.form-container {
+  width: 100%;
+  max-width: 900px;
+  background: white;
+  padding: 35px;
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+}
+
+/* Title */
+.form-title {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 24px;
+}
+
+/* Grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+/* Field */
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.full {
+  grid-column: span 2;
+}
+
+/* Label */
+label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* Input */
+.input {
+  padding: 11px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  transition: 0.2s;
+}
+
+.input:focus {
+  border-color: #6366f1;
+  background: white;
+  outline: none;
+  box-shadow: 0 0 6px rgba(99,102,241,0.2);
+}
+
+/* Textarea */
+.textarea {
+  min-height: 90px;
+  resize: none;
+}
+
+/* Footer */
+.form-footer {
+  margin-top: 25px;
+}
+
+/* Button */
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(45deg, #6366f1, #4f46e5);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full {
+    grid-column: span 1;
+  }
+}
+</style>

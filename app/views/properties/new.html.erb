@@ -1,0 +1,227 @@
+<div class="page">
+
+  <div class="form-container">
+    <div class="form-card">
+
+      <h2>🏠 Add Property</h2>
+
+      <%= form_with model: @property, html: { multipart: true }, class: "property-form" do |f| %>
+
+        <!-- BASIC -->
+        <div class="section">
+          <h4>Basic Details</h4>
+
+          <div class="grid">
+
+            <div class="field">
+              <label>Name</label>
+              <%= f.text_field :name, class: "input", placeholder: "Luxury Villa..." %>
+            </div>
+
+            <div class="field">
+              <label>Price</label>
+              <%= f.number_field :price, class: "input", placeholder: "₹ 50,00,000" %>
+            </div>
+
+            <div class="field">
+              <label>Type</label>
+              <%= f.select :property_type, ["Flat","Villa","Plot"], {}, class: "input" %>
+            </div>
+
+            <div class="field">
+              <label>Status</label>
+              <%= f.select :status, ["Available","Sold","Rented"], {}, class: "input" %>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- LOCATION -->
+        <div class="section">
+          <h4>Location</h4>
+
+          <div class="grid">
+
+            <div class="field full">
+              <label>Search Location</label>
+              <%= f.text_field :location, id: "location-input", class: "input", placeholder: 'location....' %>
+            </div>
+
+            <div class="field">
+              <label>City</label>
+              <%= f.text_field :city, class: "input", placeholder: "City..." %>
+            </div>
+
+            <div class="field">
+              <label>State</label>
+              <%= f.text_field :state, class: "input", placeholder: "State...."%>
+            </div>
+
+            <div class="field">
+              <label>Country</label>
+              <%= f.text_field :country, class: "input", placeholder: "Country...." %>
+            </div>
+
+            <div class="field">
+              <label>Pincode</label>
+              <%= f.text_field :pincode, class: "input", placeholder: "Pincode...." %>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- CONTACT -->
+        <div class="section">
+          <h4>Contact</h4>
+
+          <div class="field">
+            <label>Phone</label>
+            <%= f.telephone_field :phone_number, class: "input", placeholder: "Phone number...." %>
+          </div>
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="section">
+          <h4>Description</h4>
+
+          <%= f.text_area :description, class: "input textarea", placeholder: "Discription...." %>
+        </div>
+
+        <!-- IMAGE -->
+        <div class="section">
+          <h4>Upload Image</h4>
+
+          <div class="upload-box" id="dropArea">
+            <p>📁 Drag & Drop or Click</p>
+
+            <%= f.file_field :image, id: "fileInput", hidden: true %>
+
+            <img id="previewImage" />
+          </div>
+        </div>
+
+        <!-- BUTTON -->
+        <%= f.submit "🚀 Save Property", class: "submit-btn" %>
+
+      <% end %>
+
+    </div>
+  </div>
+
+</div>
+
+<style>
+  /* Layout */
+.page {
+  background: linear-gradient(135deg,#eef2ff,#fff);
+  min-height: 100vh;
+  padding: 40px 15px;
+}
+
+.form-container {
+  max-width: 900px;
+  margin: auto;
+}
+
+.form-card {
+  background: #fff;
+  padding: 35px;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+}
+
+/* Sections */
+.section {
+  margin-bottom: 30px;
+}
+
+.section h4 {
+  margin-bottom: 15px;
+  color: #6366f1;
+}
+
+/* Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 20px;
+}
+
+.full {
+  grid-column: span 2;
+}
+
+/* Inputs */
+.input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #f9fafb;
+}
+
+.input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 8px rgba(99,102,241,0.2);
+  outline: none;
+}
+
+.textarea {
+  height: 100px;
+}
+
+/* Upload */
+.upload-box {
+  border: 2px dashed #ccc;
+  padding: 30px;
+  text-align: center;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.upload-box img {
+  max-width: 150px;
+  margin-top: 10px;
+  display: none;
+}
+
+/* Button */
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(45deg,#6366f1,#4f46e5);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* Mobile */
+@media (max-width:768px){
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+<script>
+document.addEventListener("turbo:load", () => {
+
+  const drop = document.getElementById("dropArea");
+  const input = document.getElementById("fileInput");
+  const preview = document.getElementById("previewImage");
+
+  if (!drop) return;
+
+  drop.onclick = () => input.click();
+
+  input.onchange = () => {
+    const file = input.files[0];
+    if (file) {
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = "block";
+    }
+  };
+
+});
+</script>

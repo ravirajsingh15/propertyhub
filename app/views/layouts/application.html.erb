@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PropertyHub</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application" %>
+    <%= javascript_importmap_tags %>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  </head>
+
+  <body>
+
+  <% if user_signed_in? %>
+
+    <!-- ✅ NAVBAR -->
+    <div class="navbar">
+
+      <div class="logo">🏠 Property Hub</div>
+
+      <div class="location-filter">
+        <span class="label">
+          <i class="fa-solid fa-location-dot"></i> Location
+        </span>
+
+        <%= form_with url: properties_path, method: :get, local: true do %>
+
+          <% params.except(:city, :controller, :action).each do |key, value| %>
+            <%= hidden_field_tag key, value %>
+          <% end %>
+
+          <%= select_tag :city,
+            options_for_select(
+              [['All', 'all']] + Property.distinct.pluck(:city).compact.sort,
+              params[:city]
+            ),
+            class: "city-dropdown",
+            onchange: "this.form.submit();" %>
+
+        <% end %>
+      </div>
+
+      <div class="profile-section">
+        <span class="profile-btn" onclick="openProfile()">
+          👤 <%= current_user.name.presence || "User" %>
+        </span>
+      </div>
+
+    </div>
+
+  <% end %>
+
+  <!-- PAGE CONTENT -->
+  <%= yield %>
+
+  <% if user_signed_in? %>
+
+    <!-- ✅ PROFILE MODAL -->
+    <div id="profileModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closeProfile()">×</span>
+
+        <h3>👤 Profile</h3>
+
+        <p><strong>Name:</strong> <%= current_user.name || "Not set" %></p>
+        <p><strong>Email:</strong> <%= current_user.email %></p>
+        <p><strong>Phone:</strong> <%= current_user.phone_number %></p>
+
+        <%= button_to "Logout",
+              destroy_user_session_path,
+              method: :delete,
+              class: "logout-btn" %>
+
+      </div>
+    </div>
+
+  <% end %>
+
+  </body>
+</html>
+
+
+<style>
+  .navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(45deg, #2c3e50, #34495e);
+  padding: 12px 20px;
+  color: white;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.location-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.1);
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+.label {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.city-dropdown {
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+}
+
+.profile-btn {
+  background: white;
+  color: #2c3e50;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* MODAL */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  cursor: pointer;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+</style>
+
+<script>
+function openProfile() {
+  document.getElementById("profileModal").style.display = "flex";
+}
+
+function closeProfile() {
+  document.getElementById("profileModal").style.display = "none";
+}
+
+window.onclick = function(e) {
+  const modal = document.getElementById("profileModal");
+  if (e.target === modal) {
+    modal.style.display = "none";
+  }
+}
+</script>

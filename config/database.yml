@@ -1,0 +1,19 @@
+default: &default
+  adapter: mysql2
+  encoding: utf8mb4
+  username: property_management
+  password: pros190
+  host: 127.0.0.1
+
+development:
+  <<: *default
+  database: property_management
+
+test:
+  <<: *default
+  database: property_management_test
+
+production:
+  <<: *default
+  database: property_management_production
+  password: <%= ENV['DB_PASSWORD'] %>

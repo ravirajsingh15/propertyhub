@@ -1,0 +1,865 @@
+<div class="wishlist-page">
+
+  <!-- HERO -->
+  <div class="wishlist-hero">
+
+    <div class="hero-content">
+
+      <span class="top-tag">
+        PREMIUM COLLECTION
+      </span>
+
+      <h1>
+        ❤️ My Dream Wishlist
+      </h1>
+
+      <p>
+        Explore your luxury saved properties with immersive modern experience
+      </p>
+
+    </div>
+
+    <!-- STATS -->
+    <div class="wishlist-stats">
+
+      <div class="stat-card">
+
+        <h2>
+          <%= @properties.count %>
+        </h2>
+
+        <p>
+          Saved
+        </p>
+
+      </div>
+
+      <div class="stat-card">
+
+        <h2>
+          ₹ <%= @properties.sum(&:price) rescue 0 %>
+        </h2>
+
+        <p>
+          Total Value
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- GRID -->
+  <div class="wishlist-grid">
+
+    <% @properties.each do |property| %>
+
+      <div class="property-card">
+
+        <!-- IMAGE -->
+        <div class="property-image-wrapper">
+
+          <% if property.image.present? %>
+
+            <%= image_tag property.image.url,
+                class: "property-image" %>
+
+          <% else %>
+
+            <div class="no-image">
+
+              <i class="fa-regular fa-image"></i>
+
+              <p>No Image</p>
+
+            </div>
+
+          <% end %>
+
+          <!-- GLASS OVERLAY -->
+          <div class="glass-overlay"></div>
+
+          <!-- HEART -->
+          <div class="floating-heart">
+
+            ❤️
+
+          </div>
+
+          <!-- PRICE -->
+          <div class="price-chip">
+
+            ₹ <%= property.price %>
+
+          </div>
+
+        </div>
+
+        <!-- CONTENT -->
+        <div class="property-content">
+
+          <!-- TOP -->
+          <div class="property-top">
+
+            <div>
+
+              <h2>
+                <%= property.name %>
+              </h2>
+
+              <p class="location">
+
+                <i class="fa-solid fa-location-dot"></i>
+
+                <%= property.address %>
+
+              </p>
+
+            </div>
+
+            <div class="rating-box">
+
+              ⭐ 4.9
+
+            </div>
+
+          </div>
+
+          <!-- META -->
+          <div class="property-meta">
+
+            <div class="meta-item">
+
+              <i class="fa-solid fa-building"></i>
+
+              <span>
+                <%= property.property_type %>
+              </span>
+
+            </div>
+
+            <div class="meta-item status">
+
+              <%= property.status %>
+
+            </div>
+
+          </div>
+
+          <!-- OWNER -->
+          <div class="owner-box">
+
+            <div class="owner-avatar">
+
+              <i class="fa-solid fa-user"></i>
+
+            </div>
+
+            <div>
+
+              <h4>
+                <%= property.property_owner %>
+              </h4>
+
+              <p>
+                Verified Owner
+              </p>
+
+            </div>
+
+          </div>
+
+          <!-- CONTACT -->
+          <div class="contact-box">
+
+            <i class="fa-solid fa-phone-volume"></i>
+
+            <span>
+              <%= property.phone_number %>
+            </span>
+
+          </div>
+
+          <!-- ACTIONS -->
+          <div class="property-actions">
+
+            <!-- VIEW -->
+            <%= link_to property_path(property),
+                class: "view-btn" do %>
+
+              <i class="fa-solid fa-eye"></i>
+
+              View
+
+            <% end %>
+
+            <!-- REMOVE -->
+            <%= button_to wishlist_path(property.id),
+                method: :delete,
+                class: "remove-btn" do %>
+
+              <i class="fa-solid fa-heart-crack"></i>
+
+              Remove
+
+            <% end %>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    <% end %>
+
+  </div>
+
+</div>
+
+<!-- FONT AWESOME -->
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+
+  font-family:
+  "Poppins",
+  sans-serif;
+
+  background:
+  linear-gradient(
+    135deg,
+    #0f172a,
+    #111827,
+    #1e293b
+  );
+
+  color:white;
+
+  min-height:100vh;
+}
+
+/* PAGE */
+
+.wishlist-page{
+
+  width:95%;
+  max-width:1600px;
+
+  margin:40px auto;
+}
+
+/* HERO */
+
+.wishlist-hero{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  margin-bottom:50px;
+
+  flex-wrap:wrap;
+
+  gap:25px;
+}
+
+.top-tag{
+
+  background:
+  linear-gradient(
+    45deg,
+    #ff385c,
+    #ff6b81
+  );
+
+  padding:10px 18px;
+
+  border-radius:40px;
+
+  font-size:12px;
+
+  font-weight:bold;
+
+  letter-spacing:2px;
+
+  display:inline-block;
+
+  margin-bottom:18px;
+}
+
+.hero-content h1{
+
+  font-size:64px;
+
+  font-weight:900;
+
+  margin-bottom:12px;
+
+  background:
+  linear-gradient(
+    45deg,
+    #ffffff,
+    #ffb3c1
+  );
+
+  -webkit-background-clip:text;
+
+  -webkit-text-fill-color:transparent;
+}
+
+.hero-content p{
+
+  color:#cbd5e1;
+
+  font-size:18px;
+
+  max-width:700px;
+}
+
+/* STATS */
+
+.wishlist-stats{
+
+  display:flex;
+
+  gap:20px;
+
+  flex-wrap:wrap;
+}
+
+.stat-card{
+
+  width:170px;
+
+  padding:30px;
+
+  border-radius:28px;
+
+  background:
+  rgba(255,255,255,0.08);
+
+  backdrop-filter:blur(18px);
+
+  border:
+  1px solid rgba(255,255,255,0.08);
+
+  text-align:center;
+
+  box-shadow:
+  0 10px 35px rgba(0,0,0,0.35);
+
+  transition:0.4s;
+}
+
+.stat-card:hover{
+
+  transform:
+  translateY(-8px);
+}
+
+.stat-card h2{
+
+  font-size:38px;
+
+  margin-bottom:8px;
+
+  color:#ff758f;
+}
+
+.stat-card p{
+
+  color:#cbd5e1;
+}
+
+/* GRID */
+
+.wishlist-grid{
+
+  display:grid;
+
+  grid-template-columns:
+  repeat(auto-fit,minmax(380px,1fr));
+
+  gap:35px;
+}
+
+/* CARD */
+
+.property-card{
+
+  position:relative;
+
+  overflow:hidden;
+
+  border-radius:34px;
+
+  background:
+  rgba(255,255,255,0.08);
+
+  backdrop-filter:blur(18px);
+
+  border:
+  1px solid rgba(255,255,255,0.08);
+
+  box-shadow:
+  0 18px 45px rgba(0,0,0,0.35);
+
+  transition:0.5s;
+
+  transform-style:preserve-3d;
+}
+
+.property-card:hover{
+
+  transform:
+  translateY(-16px)
+  rotateX(3deg)
+  rotateY(-3deg);
+
+  box-shadow:
+  0 35px 60px rgba(0,0,0,0.45);
+}
+
+/* IMAGE */
+
+.property-image-wrapper{
+
+  position:relative;
+
+  overflow:hidden;
+
+  height:300px;
+}
+
+.property-image{
+
+  width:100%;
+  height:100%;
+
+  object-fit:cover;
+
+  transition:
+  transform 0.8s ease,
+  filter 0.8s ease;
+}
+
+.property-card:hover .property-image{
+
+  transform:
+  scale(1.12);
+
+  filter:
+  brightness(1.08);
+}
+
+/* GLASS */
+
+.glass-overlay{
+
+  position:absolute;
+
+  inset:0;
+
+  background:
+  linear-gradient(
+    to top,
+    rgba(0,0,0,0.6),
+    transparent 45%
+  );
+}
+
+/* HEART */
+
+.floating-heart{
+
+  position:absolute;
+
+  top:20px;
+  right:20px;
+
+  width:58px;
+  height:58px;
+
+  border-radius:50%;
+
+  background:
+  rgba(255,255,255,0.22);
+
+  backdrop-filter:blur(12px);
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-size:24px;
+
+  z-index:5;
+
+  box-shadow:
+  0 8px 20px rgba(0,0,0,0.25);
+
+  animation:
+  pulse 2s infinite;
+}
+
+@keyframes pulse{
+
+  0%{
+    transform:scale(1);
+  }
+
+  50%{
+    transform:scale(1.08);
+  }
+
+  100%{
+    transform:scale(1);
+  }
+}
+
+/* PRICE */
+
+.price-chip{
+
+  position:absolute;
+
+  bottom:20px;
+  left:20px;
+
+  z-index:5;
+
+  padding:12px 22px;
+
+  border-radius:50px;
+
+  background:white;
+
+  color:#111827;
+
+  font-weight:bold;
+
+  box-shadow:
+  0 10px 25px rgba(0,0,0,0.25);
+}
+
+/* NO IMAGE */
+
+.no-image{
+
+  width:100%;
+  height:100%;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  background:#1e293b;
+
+  color:#cbd5e1;
+}
+
+.no-image i{
+
+  font-size:60px;
+
+  margin-bottom:14px;
+}
+
+/* CONTENT */
+
+.property-content{
+
+  padding:28px;
+}
+
+/* TOP */
+
+.property-top{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:flex-start;
+
+  margin-bottom:22px;
+}
+
+.property-top h2{
+
+  font-size:30px;
+
+  margin-bottom:10px;
+}
+
+.location{
+
+  color:#cbd5e1;
+
+  font-size:14px;
+}
+
+/* RATING */
+
+.rating-box{
+
+  padding:10px 16px;
+
+  border-radius:16px;
+
+  background:
+  rgba(255,255,255,0.12);
+
+  backdrop-filter:blur(10px);
+
+  font-weight:bold;
+}
+
+/* META */
+
+.property-meta{
+
+  display:flex;
+
+  gap:12px;
+
+  margin-bottom:22px;
+}
+
+.meta-item{
+
+  flex:1;
+
+  padding:14px;
+
+  border-radius:18px;
+
+  background:
+  rgba(255,255,255,0.08);
+
+  text-align:center;
+
+  font-size:14px;
+
+  color:#f1f5f9;
+}
+
+.status{
+
+  background:
+  linear-gradient(
+    45deg,
+    #00b894,
+    #00cec9
+  );
+
+  color:white;
+
+  font-weight:bold;
+}
+
+/* OWNER */
+
+.owner-box{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:16px;
+
+  margin-bottom:20px;
+}
+
+.owner-avatar{
+
+  width:60px;
+  height:60px;
+
+  border-radius:50%;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-size:22px;
+
+  color:white;
+
+  background:
+  linear-gradient(
+    45deg,
+    #6366f1,
+    #8b5cf6
+  );
+
+  box-shadow:
+  0 10px 25px rgba(99,102,241,0.35);
+}
+
+.owner-box h4{
+
+  margin-bottom:5px;
+}
+
+.owner-box p{
+
+  color:#cbd5e1;
+
+  font-size:13px;
+}
+
+/* CONTACT */
+
+.contact-box{
+
+  padding:16px 18px;
+
+  border-radius:18px;
+
+  background:
+  rgba(255,255,255,0.08);
+
+  display:flex;
+
+  align-items:center;
+
+  gap:14px;
+
+  margin-bottom:26px;
+
+  font-weight:bold;
+}
+
+.contact-box i{
+
+  color:#34d399;
+}
+
+/* ACTIONS */
+
+.property-actions{
+
+  display:flex;
+
+  gap:14px;
+}
+
+/* VIEW */
+
+.view-btn{
+
+  flex:1;
+
+  text-align:center;
+
+  text-decoration:none;
+
+  padding:16px;
+
+  border-radius:18px;
+
+  background:
+  linear-gradient(
+    45deg,
+    #111827,
+    #374151
+  );
+
+  color:white;
+
+  font-weight:bold;
+
+  transition:0.3s;
+}
+
+.view-btn:hover{
+
+  transform:
+  translateY(-3px);
+
+  box-shadow:
+  0 12px 25px rgba(0,0,0,0.25);
+}
+
+/* REMOVE */
+
+.remove-btn{
+
+  flex:1;
+
+  border:none;
+
+  cursor:pointer;
+
+  padding:16px;
+
+  border-radius:18px;
+
+  font-weight:bold;
+
+  color:white;
+
+  background:
+  linear-gradient(
+    45deg,
+    #ff385c,
+    #ff6b81
+  );
+
+  transition:0.3s;
+}
+
+.remove-btn:hover{
+
+  transform:
+  translateY(-3px);
+
+  box-shadow:
+  0 12px 25px rgba(255,56,92,0.35);
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+  .wishlist-hero{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+  }
+
+  .hero-content h1{
+
+    font-size:42px;
+  }
+
+  .wishlist-grid{
+
+    grid-template-columns:1fr;
+  }
+
+}
+
+</style>
