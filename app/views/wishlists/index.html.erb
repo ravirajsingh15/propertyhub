@@ -139,10 +139,10 @@
 
             </div>
 
-            <div class="meta-item status">
-
-              <%= property.status %>
-
+            <div class="status-badge status">
+             <span class="status-badge status-<%= property.status.downcase %>">
+                <%= property.status %>
+              </span>
             </div>
 
           </div>
@@ -341,7 +341,7 @@ body{
 
 .stat-card{
 
-  width:170px;
+  width: 100%;
 
   padding:30px;
 
@@ -662,18 +662,28 @@ body{
   color:#f1f5f9;
 }
 
-.status{
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  color: white;
+  font-weight: 600;
+  display: inline-block;
+}
 
-  background:
-  linear-gradient(
-    45deg,
-    #00b894,
-    #00cec9
-  );
+/* AVAILABLE */
+.status-available {
+  background: #16a34a; /* Green */
+}
 
-  color:white;
+/* SOLD */
+.status-sold {
+  background: #dc2626; /* Red */
+}
 
-  font-weight:bold;
+/* RENTED */
+.status-rented {
+  background: #7c3aed; /* Purple */
 }
 
 /* OWNER */

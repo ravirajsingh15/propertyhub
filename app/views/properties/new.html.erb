@@ -1,38 +1,47 @@
 <div class="page">
-
   <div class="form-container">
     <div class="form-card">
 
-      <h2>🏠 Add Property</h2>
+      <h2 class="title">🏠 Add Property</h2>
 
-      <%= form_with model: @property, html: { multipart: true }, class: "property-form" do |f| %>
+      <%= form_with model: @property,
+          html: { multipart: true },
+          class: "property-form" do |f| %>
 
-        <!-- BASIC -->
+        <!-- BASIC DETAILS -->
         <div class="section">
           <h4>Basic Details</h4>
 
           <div class="grid">
-
             <div class="field">
               <label>Name</label>
-              <%= f.text_field :name, class: "input", placeholder: "Luxury Villa..." %>
+              <%= f.text_field :name,
+                  class: "input",
+                  placeholder: "Luxury Villa..." %>
             </div>
 
             <div class="field">
               <label>Price</label>
-              <%= f.number_field :price, class: "input", placeholder: "₹ 50,00,000" %>
+              <%= f.number_field :price,
+                  class: "input",
+                  placeholder: "5000000" %>
             </div>
 
             <div class="field">
               <label>Type</label>
-              <%= f.select :property_type, ["Flat","Villa","Plot"], {}, class: "input" %>
+              <%= f.select :property_type,
+                  ["Flat", "Villa", "Plot"],
+                  {},
+                  class: "input" %>
             </div>
 
             <div class="field">
               <label>Status</label>
-              <%= f.select :status, ["Available","Sold","Rented"], {}, class: "input" %>
+              <%= f.select :status,
+                  ["Available", "Sold", "Rented"],
+                  {},
+                  class: "input" %>
             </div>
-
           </div>
         </div>
 
@@ -44,29 +53,39 @@
 
             <div class="field full">
               <label>Search Location</label>
-              <%= f.text_field :location, id: "location-input", class: "input", placeholder: 'location....' %>
+              <%= f.text_field :location,
+                  id: "location-input",
+                  class: "input",
+                  placeholder: "Location..." %>
             </div>
 
             <div class="field">
               <label>City</label>
-              <%= f.text_field :city, class: "input", placeholder: "City..." %>
+              <%= f.text_field :city,
+                  class: "input",
+                  placeholder: "City..." %>
             </div>
 
             <div class="field">
               <label>State</label>
-              <%= f.text_field :state, class: "input", placeholder: "State...."%>
+              <%= f.text_field :state,
+                  class: "input",
+                  placeholder: "State..." %>
             </div>
 
             <div class="field">
               <label>Country</label>
-              <%= f.text_field :country, class: "input", placeholder: "Country...." %>
+              <%= f.text_field :country,
+                  class: "input",
+                  placeholder: "Country..." %>
             </div>
 
             <div class="field">
               <label>Pincode</label>
-              <%= f.text_field :pincode, class: "input", placeholder: "Pincode...." %>
+              <%= f.text_field :pincode,
+                  class: "input",
+                  placeholder: "Pincode..." %>
             </div>
-
           </div>
         </div>
 
@@ -76,7 +95,10 @@
 
           <div class="field">
             <label>Phone</label>
-            <%= f.telephone_field :phone_number, class: "input", placeholder: "Phone number...." %>
+
+            <%= f.telephone_field :phone_number,
+                class: "input",
+                placeholder: "Phone number..." %>
           </div>
         </div>
 
@@ -84,122 +106,210 @@
         <div class="section">
           <h4>Description</h4>
 
-          <%= f.text_area :description, class: "input textarea", placeholder: "Discription...." %>
+          <%= f.text_area :description,
+              class: "input textarea",
+              placeholder: "Description..." %>
         </div>
 
-        <!-- IMAGE -->
+        <!-- IMAGE UPLOAD -->
         <div class="section">
           <h4>Upload Image</h4>
 
           <div class="upload-box" id="dropArea">
-            <p>📁 Drag & Drop or Click</p>
 
-            <%= f.file_field :image, id: "fileInput", hidden: true %>
+            <p id="uploadText">
+              📁 Drag & Drop or Click to Upload
+            </p>
 
-            <img id="previewImage" />
+            <%= f.file_field :image,
+                id: "fileInput",
+                accept: "image/*",
+                hidden: true %>
+
+            <img id="previewImage" alt="Preview Image" />
+
+            <button
+              type="button"
+              id="removeImageBtn">
+              ✖ Remove
+            </button>
+
           </div>
         </div>
 
-        <!-- BUTTON -->
-        <%= f.submit "🚀 Save Property", class: "submit-btn" %>
+        <!-- SUBMIT -->
+        <%= f.submit "🚀 Save Property",
+            class: "submit-btn" %>
 
       <% end %>
-
     </div>
   </div>
-
 </div>
 
 <style>
-  /* Layout */
-.page {
-  background: linear-gradient(135deg,#eef2ff,#fff);
+/* PAGE */
+.page{
+  background: linear-gradient(135deg,#eef2ff,#ffffff);
   min-height: 100vh;
   padding: 40px 15px;
+  font-family: Arial, sans-serif;
 }
 
-.form-container {
+/* CONTAINER */
+.form-container{
   max-width: 900px;
   margin: auto;
 }
 
-.form-card {
-  background: #fff;
+/* CARD */
+.form-card{
+  background: #ffffff;
   padding: 35px;
-  border-radius: 16px;
+  border-radius: 18px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.08);
 }
 
-/* Sections */
-.section {
+.title{
+  margin-bottom: 30px;
+  text-align: center;
+  color: #4f46e5;
+}
+
+/* SECTION */
+.section{
   margin-bottom: 30px;
 }
 
-.section h4 {
+.section h4{
   margin-bottom: 15px;
   color: #6366f1;
+  font-size: 18px;
 }
 
-/* Grid */
-.grid {
+/* GRID */
+.grid{
   display: grid;
   grid-template-columns: repeat(2,1fr);
   gap: 20px;
 }
 
-.full {
+.full{
   grid-column: span 2;
 }
 
-/* Inputs */
-.input {
+/* FIELD */
+.field{
+  display: flex;
+  flex-direction: column;
+}
+
+.field label{
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* INPUT */
+.input{
   width: 100%;
-  padding: 12px;
+  padding: 12px 14px;
   border-radius: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #d1d5db;
   background: #f9fafb;
+  font-size: 15px;
+  transition: 0.3s;
+  box-sizing: border-box;
 }
 
-.input:focus {
+.input:focus{
   border-color: #6366f1;
-  box-shadow: 0 0 8px rgba(99,102,241,0.2);
+  box-shadow: 0 0 8px rgba(99,102,241,0.25);
   outline: none;
+  background: #fff;
 }
 
-.textarea {
-  height: 100px;
+/* TEXTAREA */
+.textarea{
+  height: 120px;
+  resize: vertical;
 }
 
-/* Upload */
-.upload-box {
-  border: 2px dashed #ccc;
-  padding: 30px;
+/* UPLOAD BOX */
+.upload-box{
+  border: 2px dashed #cbd5e1;
+  padding: 35px 20px;
   text-align: center;
-  border-radius: 10px;
+  border-radius: 14px;
   cursor: pointer;
+  transition: 0.3s;
+  background: #f8fafc;
+  position: relative;
 }
 
-.upload-box img {
-  max-width: 150px;
-  margin-top: 10px;
+.upload-box:hover{
+  border-color: #6366f1;
+  background: #eef2ff;
+}
+
+/* PREVIEW IMAGE */
+#previewImage{
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  margin-top: 15px;
+  border-radius: 14px;
   display: none;
 }
 
-/* Button */
-.submit-btn {
+/* REMOVE BUTTON */
+#removeImageBtn{
+  margin-top: 15px;
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: none;
+  transition: 0.3s;
+}
+
+#removeImageBtn:hover{
+  background: #dc2626;
+}
+
+/* SUBMIT BUTTON */
+.submit-btn{
   width: 100%;
   padding: 14px;
   background: linear-gradient(45deg,#6366f1,#4f46e5);
-  color: white;
+  color: #fff;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
+  transition: 0.3s;
 }
 
-/* Mobile */
-@media (max-width:768px){
-  .grid {
+.submit-btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(79,70,229,0.3);
+}
+
+/* MOBILE */
+@media (max-width: 768px){
+
+  .grid{
     grid-template-columns: 1fr;
+  }
+
+  .full{
+    grid-column: span 1;
+  }
+
+  .form-card{
+    padding: 20px;
   }
 }
 </style>
@@ -207,21 +317,95 @@
 <script>
 document.addEventListener("turbo:load", () => {
 
-  const drop = document.getElementById("dropArea");
-  const input = document.getElementById("fileInput");
-  const preview = document.getElementById("previewImage");
+  const dropArea = document.getElementById("dropArea");
+  const fileInput = document.getElementById("fileInput");
+  const previewImage = document.getElementById("previewImage");
+  const removeBtn = document.getElementById("removeImageBtn");
+  const uploadText = document.getElementById("uploadText");
 
-  if (!drop) return;
+  if (!dropArea || !fileInput) return;
 
-  drop.onclick = () => input.click();
+  /* CLICK TO OPEN FILE */
+  dropArea.addEventListener("click", (e) => {
 
-  input.onchange = () => {
-    const file = input.files[0];
-    if (file) {
-      preview.src = URL.createObjectURL(file);
-      preview.style.display = "block";
+    if (e.target.id !== "removeImageBtn") {
+      fileInput.click();
     }
-  };
+
+  });
+
+  /* FILE CHANGE */
+  fileInput.addEventListener("change", () => {
+
+    const file = fileInput.files[0];
+
+    if (file) {
+      showPreview(file);
+    }
+
+  });
+
+  /* DRAG OVER */
+  dropArea.addEventListener("dragover", (e) => {
+
+    e.preventDefault();
+    dropArea.style.borderColor = "#6366f1";
+
+  });
+
+  /* DRAG LEAVE */
+  dropArea.addEventListener("dragleave", () => {
+
+    dropArea.style.borderColor = "#cbd5e1";
+
+  });
+
+  /* DROP FILE */
+  dropArea.addEventListener("drop", (e) => {
+
+    e.preventDefault();
+
+    dropArea.style.borderColor = "#cbd5e1";
+
+    const file = e.dataTransfer.files[0];
+
+    if (file) {
+
+      fileInput.files = e.dataTransfer.files;
+      showPreview(file);
+
+    }
+
+  });
+
+  /* REMOVE IMAGE */
+  removeBtn.addEventListener("click", (e) => {
+
+    e.stopPropagation();
+
+    fileInput.value = "";
+    previewImage.src = "";
+    previewImage.style.display = "none";
+
+    removeBtn.style.display = "none";
+    uploadText.style.display = "block";
+
+  });
+
+  /* PREVIEW FUNCTION */
+  function showPreview(file){
+
+    if (!file.type.startsWith("image/")) {
+      alert("Please upload an image file.");
+      return;
+    }
+
+    previewImage.src = URL.createObjectURL(file);
+    previewImage.style.display = "block";
+
+    removeBtn.style.display = "inline-block";
+    uploadText.style.display = "none";
+  }
 
 });
 </script>
